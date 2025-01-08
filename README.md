@@ -3,6 +3,27 @@
 Geocoding API - https://openweathermap.org/api/geocoding-api
 Weather API - https://openweathermap.org/current
 
+# Netlify Configuration
+- Add below files
+1. Add `netlify.toml` in the root of the project
+
+```
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+```
+
+2. Add `_redirects` under public folder
+
+```
+/*    /index.html   200
+```
+
 # Nuxt Minimal Starter
 
 Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
