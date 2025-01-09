@@ -41,7 +41,7 @@
             <p>
               If you no longer wish to track a city, simply select
               the city within the home page. At the bottom of the
-              page, there will be an option to remove the city.
+              page, there is an option to remove the city.
             </p>
           </div>
         </BaseModal>
@@ -51,7 +51,6 @@
 </template>
 
 <script setup>
-import { uid } from 'uid'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
@@ -65,23 +64,26 @@ const addCity = () => {
   }
 
   const locationObj = {
-    id: uid(),
-    state: route.params.state,
+    id: route.query.id,
+    state: route.query.state,
     city: route.params.city,
+    country: route.params.country,
     coords: {
       lat: route.query.lat,
       lon: route.query.lon
     }
   }
 
-  savedCities.value.push(locationObj)
-  localStorage.setItem('savedCities', JSON.stringify(savedCities.value))
+  if (!savedCities.value.some(city => city.id === locationObj.id)) {
+    savedCities.value.push(locationObj)
+    localStorage.setItem('savedCities', JSON.stringify(savedCities.value))
+  }
 
   let query = Object.assign({}, route.query)
   delete query.preview
-  query.id = locationObj.id
   router.replace({ query })
 }
+
 const toggleModal = () => {
   modalActive.value = !modalActive.value
 }

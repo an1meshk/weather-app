@@ -1,7 +1,7 @@
 # Weather App
 ### API Used
-Geocoding API - https://openweathermap.org/api/geocoding-api
-Weather API - https://openweathermap.org/current
+- Geocoding API - https://openweathermap.org/api/geocoding-api
+- Weather API - https://openweathermap.org/current
 
 # Netlify Configuration
 - Add below files

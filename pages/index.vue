@@ -2,7 +2,8 @@
     <main class="container text-white">
         <div class="pt-4 mb-8 relative">
             <input v-model="searchQuery" @input="debouncedSearch" type="text" placeholder="Search for a city or state"
-                class="py-2 px-1 w-full bg-transparent border-b focus:border-weather-secondary focus:outline-none focus:shadow-sm">
+                class="py-2 px-1 w-full bg-transparent border-b focus:border-weather-secondary focus:outline-none focus:shadow-sm"
+                maxlength="15">
             <ul v-if="searchResults"
                 class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[66px]">
                 <p v-if="searchError">Oh, snapp! something went wrong try again.</p>
@@ -13,7 +14,8 @@
                 <template v-else>
                     <li v-for="searchResult in searchResults" :key="searchResult.lat" class="py-2 cursor-pointer"
                         @click="previewCity(searchResult)">
-                        {{ `${searchResult.name}, ${searchResult.state ?? ''}, ${searchResult.country}` }}
+                        {{ `${searchResult.name}, ${searchResult.state ? searchResult.state + ',' : ''}
+                        ${searchResult.country}` }}
                     </li>
                 </template>
             </ul>
@@ -31,6 +33,7 @@
 
 <script setup>
 import debounce from 'lodash.debounce'
+import { uid } from 'uid'
 
 const searchQuery = ref("")
 const searchResults = ref(null)
@@ -59,20 +62,50 @@ const getSearchResult = async () => {
         searchError.value = true
     }
 }
-const debouncedSearch = debounce(getSearchResult, 300)
+const debouncedSearch = debounce(getSearchResult, 600)
 
 const previewCity = async (searchResult) => {
-    const routePath = `weather/${searchResult.name.replaceAll(" ", "")}~${searchResult.state.replaceAll(" ", "")}`
+    let trackedCity = null
+    try {
+        if (localStorage.getItem('savedCities')) {
+            const savedCities = JSON.parse(localStorage.getItem('savedCities'))
 
-    await navigateTo(
-        {
-            path: routePath,
-            query: {
-                lat: searchResult.lat,
-                lon: searchResult.lon,
-                preview: true
-            }
+            trackedCity = savedCities.find(city => {
+                return city.coords.lat === searchResult.lat.toString()
+                    && city.coords.lon === searchResult.lon.toString()
+            })
         }
-    )
+
+        if (trackedCity) {
+            const routePath = `weather/${trackedCity.city.replaceAll(" ", "")}~${trackedCity.country.replaceAll(" ", "")}`
+            await navigateTo(
+                {
+                    path: routePath,
+                    query: {
+                        lat: trackedCity.coords.lat,
+                        lon: trackedCity.coords.lon,
+                        state: trackedCity.state,
+                        id: trackedCity.id
+                    }
+                }
+            )
+
+        } else {
+            const routePath = `weather/${searchResult.name.replaceAll(" ", "")}~${searchResult.country.replaceAll(" ", "")}`
+            await navigateTo(
+                {
+                    path: routePath,
+                    query: {
+                        lat: searchResult.lat,
+                        lon: searchResult.lon,
+                        preview: true,
+                        state: searchResult.state,
+                        id: uid()
+                    }
+                }
+            )
+        }
+    } catch {
+    }
 }
 </script>

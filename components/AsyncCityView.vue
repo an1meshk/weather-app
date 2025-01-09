@@ -8,7 +8,7 @@
         </div>
         <!-- Weather Overview -->
         <div class="flex flex-col items-center text-white py-10">
-            <h1 class="text-4xl mb-2">{{ `${route.params.city}, ${route.params.state}` }}</h1>
+            <h1 class="text-4xl mb-2">{{ `${route.params.city}, ${route.query.state ?? route.params.country}` }}</h1>
             <div class="text-sm mb-8 text-center">
                 <p>
                     {{
