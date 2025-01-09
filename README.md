@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/2d979b8f-19e0-462e-a007-a95f92afd95e/deploy-status)](https://app.netlify.com/sites/aks-localweather/deploys)
+
 # Weather App
 ### API Used
 - Geocoding API - https://openweathermap.org/api/geocoding-api
