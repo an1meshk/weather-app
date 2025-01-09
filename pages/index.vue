@@ -1,9 +1,13 @@
 <template>
     <main class="container text-white">
         <div class="pt-4 mb-8 relative">
-            <input v-model="searchQuery" @input="debouncedSearch" type="text" placeholder="Search for a city or state"
-                class="py-2 px-1 w-full bg-transparent border-b focus:border-weather-secondary focus:outline-none focus:shadow-sm"
-                maxlength="15">
+            <div class="flex items-center gap-3 justify-between">
+                <input v-model="searchQuery" @input="debouncedSearch" type="text"
+                    placeholder="Search for a city or state"
+                    class="py-2 px-1 w-5/6 bg-transparent border-b focus:border-weather-secondary focus:outline-none focus:shadow-sm"
+                    maxlength="15">
+                <i class="fa-solid fa-xmark w-1/6" @click="clearInput"></i>
+            </div>
             <ul v-if="searchResults"
                 class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[66px]">
                 <p v-if="searchError">Oh, snapp! something went wrong try again.</p>
@@ -107,5 +111,9 @@ const previewCity = async (searchResult) => {
         }
     } catch {
     }
+}
+
+const clearInput = () => {
+    searchQuery.value = null
 }
 </script>
