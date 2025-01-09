@@ -62,7 +62,7 @@ const getSearchResult = async () => {
         searchError.value = true
     }
 }
-const debouncedSearch = debounce(getSearchResult, 600)
+const debouncedSearch = debounce(getSearchResult, 500)
 
 const previewCity = async (searchResult) => {
     let trackedCity = null
