@@ -2,33 +2,37 @@
     <div class="flex flex-col flex-1 items-center">
         <!-- Banner -->
         <div v-if="route.query.preview" class="text-white p-4 bg-weather-secondary w-full text-center">
-            <p>You are currently previewing the {{ route.params.city }}'s weather, click the "+" icon to start tracking
+            <p>You are currently previewing {{ route.params.city }}'s weather. Click the "+" icon to start tracking
                 this city
             </p>
         </div>
         <!-- Weather Overview -->
         <div class="flex flex-col items-center text-white py-10">
             <h1 class="text-4xl mb-2">{{ `${route.params.city}, ${route.params.state}` }}</h1>
-            <p class="text-sm mb-8">
-                {{
-                    new Date().toLocaleDateString(
-                        "en-us",
-                        {
-                            weekday: "long",
-                            day: "2-digit",
-                            month: "short",
-                        }
-                    )
-                }}
-                {{
-                    new Date().toLocaleTimeString(
-                        "en-us",
-                        {
-                            timeStyle: "long",
-                        }
-                    )
-                }}
-            </p>
+            <div class="text-sm mb-8 text-center">
+                <p>
+                    {{
+                        new Date().toLocaleDateString(
+                            "en-us",
+                            {
+                                weekday: "long",
+                                day: "2-digit",
+                                month: "short",
+                            }
+                        )
+                    }}
+                </p>
+                <p>
+                    {{
+                        new Date().toLocaleTimeString(
+                            "en-us",
+                            {
+                                timeStyle: "long",
+                            }
+                        )
+                    }}
+                </p>
+            </div>
             <p class="text-8xl mb-6">
                 {{ Math.round(weatherData.main.temp) }}&deg;F
             </p>
@@ -52,11 +56,12 @@
             <div class="flex flex-col py-1 w-full">
                 <h1 class="text-center text-xl">Wind</h1>
                 <p>Speed: {{ Math.round(weatherData.wind.speed) }} mph</p>
-                <p>Gust: {{ Math.round(weatherData.wind.gust) }} mph</p>
+                <p v-if="weatherData.wind.gust">Gust: {{ Math.round(weatherData.wind.gust) }} mph</p>
                 <p>Direction: {{ Math.round(weatherData.wind.deg) }}&deg;</p>
             </div>
         </div>
-        <div class="flex items-center gap-3 py-4 text-white cursor-pointer duration-150 hover:font-red-500"
+        <div v-if="!route.query.preview"
+            class="flex items-center gap-3 py-4 text-white cursor-pointer duration-150 hover:font-red-500"
             @click="removeCity">
             <i class="fa-solid fa-trash"></i>
             <p>Remove City</p>

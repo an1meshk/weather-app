@@ -7,13 +7,13 @@
                 class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[66px]">
                 <p v-if="searchError">Oh, snapp! something went wrong try again.</p>
 
-                <p v-if="!searchError && searchResults?.length === 0">No results match your query, try a differen term.
+                <p v-if="!searchError && searchResults?.length === 0">No results match your query, try a different term.
                 </p>
 
                 <template v-else>
                     <li v-for="searchResult in searchResults" :key="searchResult.lat" class="py-2 cursor-pointer"
                         @click="previewCity(searchResult)">
-                        {{ `${searchResult.name}, ${searchResult.state}, ${searchResult.country}` }}
+                        {{ `${searchResult.name}, ${searchResult.state ?? ''}, ${searchResult.country}` }}
                     </li>
                 </template>
             </ul>
