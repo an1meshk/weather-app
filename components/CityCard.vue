@@ -1,7 +1,7 @@
 <template>
     <div class="flex py-6 px-3 bg-weather-secondary rounded-md shadow-md cursor-pointer">
-        <div class="flex flex-col flex-1">
-            <h2 class="text-3xl">{{ city.city }}</h2>
+        <div class="flex flex-col flex-1 min-w-0">
+            <h2 class="text-3xl truncate">{{ city.city }}</h2>
             <h3>{{ city.state ?? city.country }}</h3>
         </div>
         <div class="flex flex-col gap-2">

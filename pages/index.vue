@@ -2,17 +2,17 @@
     <main class="container text-white">
         <div class="pt-4 mb-8 relative">
             <div class="flex items-center gap-3 justify-between">
-                <input v-model="searchQuery" @input="debouncedSearch" type="text"
-                    placeholder="Search for a city or state"
-                    class="py-2 px-1 w-5/6 bg-transparent border-b focus:border-weather-secondary focus:outline-none focus:shadow-sm"
-                    maxlength="15">
-                <i class="fa-solid fa-xmark w-1/6" @click="clearInput"></i>
+                <input v-model="searchQuery" @input="debouncedSearch" type="text" placeholder="Search for a location"
+                    class="py-2 px-1 w-full bg-transparent border-b focus:border-weather-secondary focus:outline-none focus:shadow-sm"
+                    maxlength="35">
+                <i class="fa-solid fa-xmark w-[10px]" @click="clearInput"></i>
             </div>
             <ul v-if="searchResults"
                 class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[66px]">
                 <p v-if="searchError">Oh, snapp! something went wrong try again.</p>
 
-                <p v-if="!searchError && searchResults?.length === 0">No results match your query, try a different term.
+                <p v-if="!searchError && searchResults?.length === 0">No results match your input, try a different
+                    location.
                 </p>
 
                 <template v-else>
@@ -24,7 +24,7 @@
                 </template>
             </ul>
         </div>
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-3 mb-2">
             <Suspense>
                 <CityList />
                 <template #fallback>
@@ -66,7 +66,7 @@ const getSearchResult = async () => {
         searchError.value = true
     }
 }
-const debouncedSearch = debounce(getSearchResult, 500)
+const debouncedSearch = debounce(getSearchResult, 400)
 
 const previewCity = async (searchResult) => {
     let trackedCity = null
@@ -81,7 +81,7 @@ const previewCity = async (searchResult) => {
         }
 
         if (trackedCity) {
-            const routePath = `weather/${trackedCity.city.replaceAll(" ", "")}~${trackedCity.country.replaceAll(" ", "")}`
+            const routePath = `weather/${trackedCity.city}~${trackedCity.country}`
             await navigateTo(
                 {
                     path: routePath,
@@ -95,7 +95,7 @@ const previewCity = async (searchResult) => {
             )
 
         } else {
-            const routePath = `weather/${searchResult.name.replaceAll(" ", "")}~${searchResult.country.replaceAll(" ", "")}`
+            const routePath = `weather/${searchResult.name}~${searchResult.country}`
             await navigateTo(
                 {
                     path: routePath,

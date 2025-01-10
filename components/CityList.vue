@@ -42,7 +42,7 @@ const getCities = async () => {
 await getCities()
 
 const goToCityView = async (city) => {
-    const routePath = `weather/${city.city.replaceAll(" ", "")}~${city.country.replaceAll(" ", "")}`
+    const routePath = `weather/${city.city}~${city.country}`
 
     await navigateTo(
         {
