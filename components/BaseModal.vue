@@ -4,10 +4,13 @@
             <div v-show="modalActive"
                 class="absolute bg-black bg-opacity-30 w-full h-screen top-0 left-0 flex justify-center px-8 z-10 overflow-scroll">
                 <Transition name="modal-inner">
-                    <div v-if="modalActive" class="p-4 bg-white self-start mt-32 max-w-screen-md">
+                    <div v-if="modalActive" class="p-4 bg-white self-start mt-32 mb-4 max-w-screen-md relative">
+                        <i class="fa-solid fa-xmark absolute top-0 right-0 mt-4 mr-4" @click="$emit('close-modal')"></i>
                         <slot></slot>
-                        <button class="text-white mt-8 bg-weather-primary py-2 px-6"
-                            @click="$emit('close-modal')">Close</button>
+                        <div class="text-center">
+                            <button class="text-white mt-8 bg-weather-primary py-2 px-6"
+                                @click="$emit('close-modal')">Close</button>
+                        </div>
                     </div>
                 </Transition>
             </div>

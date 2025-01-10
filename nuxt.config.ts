@@ -11,7 +11,7 @@ export default defineNuxtConfig({
       tailwindcss: {},
     }
   },
-  css: ['~/assets/css/tailwind.css'],
+  css: ['~/assets/css/tailwind.css','~/assets/css/custom.css'],
   app: {
     head: {
       link: [

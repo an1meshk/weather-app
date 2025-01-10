@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col flex-1 items-center">
+    <div class="flex flex-col flex-1 items-center mx-4">
         <!-- Banner -->
         <div v-if="route.query.preview" class="text-white p-4 bg-weather-secondary w-full text-center">
             <p>You are currently previewing {{ route.params.city }}'s weather. Click the "+" icon to start tracking
@@ -16,24 +16,13 @@
             <div class="text-sm mb-8 text-center">
                 <p>
                     {{
-                        new Date().toLocaleDateString(
-                            "en-us",
-                            {
-                                weekday: "long",
-                                day: "2-digit",
-                                month: "short",
-                            }
-                        )
+                        `${getLocalTimeFromOffsetArr()[0]} ${getLocalTimeFromOffsetArr()[1]}
+                    ${getLocalTimeFromOffsetArr()[2]}`
                     }}
                 </p>
                 <p>
                     {{
-                        new Date().toLocaleTimeString(
-                            "en-us",
-                            {
-                                timeStyle: "long",
-                            }
-                        )
+                        `${getLocalTimeFromOffsetArr()[4]}`
                     }}
                 </p>
             </div>
@@ -113,4 +102,14 @@ const removeCity = async () => {
     await navigateTo('/')
 }
 
+const getLocalTimeFromOffsetArr = () => {
+    const timezoneOffset = weatherData.value.timezone;
+    const dt = weatherData.value.dt
+    const localTimestamp = dt + timezoneOffset; // Offset is in seconds, dt is in seconds
+    const localDate = new Date(localTimestamp * 1000); // Convert to milliseconds
+
+    const localTime = localDate.toUTCString().replace("GMT", "GMT+" + timezoneOffset / 3600);
+    const dateTimeArr = localTime.split(" ")
+    return dateTimeArr;
+}
 </script>
