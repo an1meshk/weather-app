@@ -7,7 +7,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "dev:mock": "MOCK=true concurrently --killOthers 'node mock-serve.js' 'nuxt dev'"
   },
   "dependencies": {
     "lodash.debounce": "^4.0.8",
@@ -17,6 +18,10 @@
     "vue-router": "latest"
   },
   "devDependencies": {
-    "@nuxtjs/tailwindcss": "^6.12.2"
+    "@ng-apimock/core": "^3.12.0",
+    "@ng-apimock/dev-interface": "^3.5.1",
+    "@nuxtjs/tailwindcss": "^6.12.2",
+    "concurrently": "^9.1.2",
+    "express": "^4.21.2"
   }
 }

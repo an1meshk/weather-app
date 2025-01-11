@@ -1,0 +1,51 @@
+{
+    "name": "Geocoding API",
+    "request": {
+        "url": "/geo/1.0/direct",
+        "method": "GET"
+    },
+    "responses": {
+        "ok": {
+            "default": true,
+            "data": [
+                {
+                  "name": "Stockholm",
+                  "lat": 59.3251172,
+                  "lon": 18.0710935,
+                  "country": "SE"
+                },
+                {
+                    "name": "Chandler",
+                    "lat": 33.3061605,
+                    "lon": -111.84125,
+                    "country": "US",
+                    "state": "Arizona"
+                  },
+                {
+                    "name": "Patna",
+                    "lat": 25.6093239,
+                    "lon": 85.1235252,
+                    "country": "IN",
+                    "state": "Bihar"
+                  },
+                {
+                    "name": "Sri Jayawardenepura Kotte",
+                    "lat": 6.8883219,
+                    "lon": 79.9187415,
+                    "country": "LK",
+                    "state": "Western Province"
+                  },
+                  {
+                    "name": "Bhubaneshwar",
+                    "lat": 20.2602964,
+                    "lon": 85.8394521,
+                    "country": "IN",
+                    "state": "Odisha"
+                  }
+              ]
+        },
+        "internal_server_error": {
+            "status": 500
+        }
+    }   
+}

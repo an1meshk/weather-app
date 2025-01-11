@@ -1,0 +1,60 @@
+{
+    "name": "Weather API",
+    "request": {
+        "url": "/data/2.5/weather",
+        "method": "GET"
+    },
+    "responses": {
+        "ok": {
+            "default": true,
+            "data": {
+                "coord": {
+                  "lon": 85.1235,
+                  "lat": 25.6093
+                },
+                "weather": [
+                  {
+                    "id": 711,
+                    "main": "Smoke",
+                    "description": "smoke",
+                    "icon": "50d"
+                  }
+                ],
+                "base": "stations",
+                "main": {
+                  "temp": 64.35,
+                  "feels_like": 63.68,
+                  "temp_min": 64.35,
+                  "temp_max": 64.35,
+                  "pressure": 1022,
+                  "humidity": 68,
+                  "sea_level": 1022,
+                  "grnd_level": 1016
+                },
+                "visibility": 1200,
+                "wind": {
+                  "speed": 0,
+                  "deg": 0
+                },
+                "clouds": {
+                  "all": 2
+                },
+                "dt": 1736571597,
+                "sys": {
+                  "type": 1,
+                  "id": 9129,
+                  "country": "IN",
+                  "sunrise": 1736557641,
+                  "sunset": 1736596016
+                },
+                "timezone": 19800,
+                "id": 1260086,
+                "name": "Patna",
+                "cod": 200
+              }
+        },
+        "internal_server_error": {
+            "status": 500
+        }
+    }   
+}

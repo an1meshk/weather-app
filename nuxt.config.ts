@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
+  ssr: true,
   modules: [
     '@nuxtjs/tailwindcss'
   ],
@@ -27,6 +28,9 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' }
   },
   runtimeConfig: {
-    API_KEY: process.env.API_KEY
+    API_KEY: process.env.API_KEY,
+    public: {
+      apiBase: process.env.MOCK ? 'http://localhost:8080' : 'https://api.openweathermap.org'
+    }
   }
 })
