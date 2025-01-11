@@ -1,5 +1,7 @@
 <template>
-    <div class="flex flex-col flex-1 items-center mx-4">
+    <div v-if="!weatherData" class="flex flex-col items-center text-white py-10">Oh, snapp! something went wrong, try
+        again.</div>
+    <div v-else class="flex flex-col flex-1 items-center mx-4">
         <!-- Banner -->
         <div v-if="route.query.preview" class="text-white p-4 bg-weather-secondary w-full text-center">
             <p>You are currently previewing {{ route.params.city }}'s weather. Click the "+" icon to start tracking
@@ -65,8 +67,7 @@
 <script setup>
 import { useRoute } from 'vue-router';
 
-const currLocalTime = ref(null)
-
+const isError = ref(false)
 const route = useRoute()
 const getWeatherData = async () => {
     try {
@@ -85,8 +86,8 @@ const getWeatherData = async () => {
         } else {
             return null
         }
-    } catch (err) {
-        console.log(err)
+    } catch {
+        isError.value = true
     }
 }
 
@@ -103,6 +104,8 @@ const removeCity = async () => {
 }
 
 const getLocalTimeFromOffsetArr = () => {
+    if (!weatherData.value) return
+
     const timezoneOffset = weatherData.value.timezone;
     const dt = weatherData.value.dt
     const localTimestamp = dt + timezoneOffset; // Offset is in seconds, dt is in seconds

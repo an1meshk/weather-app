@@ -5,13 +5,13 @@
                 <input v-model="searchQuery" @input="debouncedSearch" type="text" placeholder="Search for a location"
                     class="py-2 px-1 w-full bg-transparent border-b focus:border-weather-secondary focus:outline-none focus:shadow-sm"
                     maxlength="35">
-                <i class="fa-solid fa-xmark w-[10px]" @click="clearInput"></i>
+                <i v-if="searchQuery" class="fa-solid fa-xmark w-[10px]" @click="clearInput"></i>
             </div>
-            <ul v-if="searchResults"
+            <ul v-if="searchResults || searchError"
                 class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[66px]">
-                <p v-if="searchError">Oh, snapp! something went wrong try again.</p>
+                <p v-if="searchError == true">Oh, snapp! something went wrong, try again.</p>
 
-                <p v-if="!searchError && searchResults?.length === 0">No results match your input, try a different
+                <p v-else-if="!searchError && searchResults?.length === 0">No results match your input, try a different
                     location.
                 </p>
 
@@ -25,12 +25,9 @@
             </ul>
         </div>
         <div class="flex flex-col gap-3 mb-2">
-            <Suspense>
+            <client-only>
                 <CityList />
-                <template #fallback>
-                    <CityCardSkeleton />
-                </template>
-            </Suspense>
+            </client-only>
         </div>
     </main>
 </template>
@@ -41,28 +38,31 @@ import { uid } from 'uid'
 
 const searchQuery = ref("")
 const searchResults = ref(null)
-const searchError = ref(null)
+const searchError = ref(false)
 
 useHead({
     titleTemplate: 'Home %s'
 })
+
 const getSearchResult = async () => {
     if (searchQuery === "") {
         searchResults.value = null
         return
     }
 
-    try {
-        const { data } = await useFetch('/api/geocoding', {
-            immediate: false,
-            query: {
-                searchText: searchQuery
-            },
-            transform: data => {
-                searchResults.value = data
-            }
-        })
-    } catch {
+    const { data, error } = await useFetch('/api/geocoding', {
+        immediate: false,
+        query: {
+            searchText: searchQuery
+        },
+        transform: data => {
+            searchResults.value = data
+        }
+    }, {
+        client: true
+    })
+
+    if (error.value) {
         searchError.value = true
     }
 }
@@ -115,5 +115,6 @@ const previewCity = async (searchResult) => {
 
 const clearInput = () => {
     searchQuery.value = null
+    searchError.value = false
 }
 </script>
