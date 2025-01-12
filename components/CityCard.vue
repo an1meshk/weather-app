@@ -4,7 +4,7 @@
             <h2 class="text-3xl truncate">{{ city.city }}</h2>
             <h3>{{ city.state ?? city.country }}</h3>
         </div>
-        <div class="flex flex-col gap-2">
+        <div v-if="city.weather?.main" class="flex flex-col gap-2">
             <p class="text-3xl self-end">{{ Math.round(city.weather?.main.temp) }}&deg F</p>
             <div class="flex gap-2">
                 <span class="text-xs">
@@ -14,6 +14,9 @@
                     L: {{ Math.round(city.weather?.main.temp_min) }}&deg
                 </span>
             </div>
+        </div>
+        <div v-else class="flex flex-col gap-2">
+            <p class="text-sm self-end">Data Unavailable</p>
         </div>
     </div>
 </template>

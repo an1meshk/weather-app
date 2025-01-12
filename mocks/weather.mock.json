@@ -53,6 +53,9 @@
                 "cod": 200
               }
         },
+        "empty": {
+          "data": {}
+        },
         "internal_server_error": {
             "status": 500
         }

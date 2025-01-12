@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!weatherData" class="flex flex-col items-center text-white py-10">Oh, snapp! something went wrong, try
+    <div v-if="isError" class="flex flex-col items-center text-white py-10">Oh, snapp! something went wrong, try
         again.</div>
     <div v-else class="flex flex-col flex-1 items-center mx-4">
         <!-- Banner -->
@@ -70,24 +70,24 @@ import { useRoute } from 'vue-router';
 const isError = ref(false)
 const route = useRoute()
 const getWeatherData = async () => {
-    try {
-        const apiData = await useFetch('/api/weather', {
-            query: {
-                lat: route.query.lat,
-                lon: route.query.lon
-            }
-        })
-
-        //Flicker Delay
-        await new Promise((res) => setTimeout(res, 500))
-
-        if (apiData.data) {
-            return apiData.data;
-        } else {
-            return null
+    const { data, error } = await useFetch('/api/weather', {
+        query: {
+            lat: route.query.lat,
+            lon: route.query.lon
         }
-    } catch {
+    })
+
+    //Flicker Delay
+    await new Promise((res) => setTimeout(res, 500))
+
+    if (error.value) {
         isError.value = true
+        showError({
+            statusCode: 500,
+            message: "Oh, snapp! something went wrong. Could not get the weather information. Please try again"
+        })
+    } else {
+        return data;
     }
 }
 

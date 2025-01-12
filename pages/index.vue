@@ -7,9 +7,9 @@
                     maxlength="35">
                 <i v-if="searchQuery" class="fa-solid fa-xmark w-[10px]" @click="clearInput"></i>
             </div>
-            <ul v-if="searchResults || searchError"
+            <ul v-if="searchQuery?.length !== 0 && (searchResults || searchError)"
                 class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[66px]">
-                <p v-if="searchError == true">Oh, snapp! something went wrong, try again.</p>
+                <p v-if="searchError">Oh, snapp! something went wrong, try again.</p>
 
                 <p v-else-if="!searchError && searchResults?.length === 0">No results match your input, try a different
                     location.
@@ -25,9 +25,12 @@
             </ul>
         </div>
         <div class="flex flex-col gap-3 mb-2">
-            <client-only>
+            <Suspense>
                 <CityList />
-            </client-only>
+                <template #fallback>
+                    <CityCardSkeleton />
+                </template>
+            </Suspense>
         </div>
     </main>
 </template>
@@ -50,21 +53,19 @@ const getSearchResult = async () => {
         return
     }
 
-    const { data, error } = await useFetch('/api/geocoding', {
-        immediate: false,
-        query: {
-            searchText: searchQuery
-        },
-        transform: data => {
-            searchResults.value = data
-        }
-    }, {
-        client: true
-    })
+    try {
+        const data = await $fetch('/api/geocoding', {
+            query: {
+                searchText: searchQuery.value
+            }
+        })
 
-    if (error.value) {
+        if (data)
+            searchResults.value = data
+    } catch (err) {
         searchError.value = true
     }
+
 }
 const debouncedSearch = debounce(getSearchResult, 400)
 

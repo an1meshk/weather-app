@@ -1,22 +1,20 @@
 <template>
-    <div>
-        <div v-if="isFetching == true">
-            <CityCardSkeleton />
-        </div>
-        <template v-else-if="savedCities.length !== 0">
-            <div v-for="city in savedCities" :key="city.id" class="py-2">
-                <CityCard :city="city" @click="goToCityView(city)" />
+    <ClientOnly>
+        <div>
+            <div v-if="savedCities.length > 0">
+                <div v-for="city in savedCities" :key="city.id" class="py-2">
+                    <CityCard :city="city" @click="goToCityView(city)" />
+                </div>
             </div>
-        </template>
-        <div v-else>
-            <p>No locations added. To start tracking a location, search in the field above.</p>
+            <div v-else>
+                <p>No locations added. To start tracking a location, search in the field above.</p>
+            </div>
         </div>
-    </div>
+    </ClientOnly>
 </template>
 
 <script setup>
 const savedCities = ref([])
-const isFetching = ref(false)
 
 const getCities = async () => {
     try {
@@ -51,12 +49,9 @@ const getCities = async () => {
 }
 
 try {
-    isFetching.value = true
     await getCities()
-} catch {
+} catch (err) {
 
-} finally {
-    isFetching.value = false
 }
 
 const goToCityView = async (city) => {

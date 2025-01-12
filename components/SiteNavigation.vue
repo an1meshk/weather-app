@@ -17,7 +17,7 @@
           <div class="text-black">
             <h1 class="text-2xl mb-1">About:</h1>
             <p class="mb-4">
-              The Local Weather allows you to track the weather of location of your choose.
+              The Local Weather allows you to track the weather of location of your choice.
             </p>
             <h2 class="text-2xl">How it works:</h2>
             <ol class="list-decimal list-inside mb-4">
@@ -27,20 +27,20 @@
               </li>
               <li>
                 Select a location within the results, this will take
-                you to the current weather for your selection.
+                you to the current weather of selected location.
               </li>
               <li>
-                Track it by clicking on the "+" icon in the
-                top right. This will save the location to view at a
+                You may also track it by clicking on the "+" icon at the
+                top. This will save the location to view at a
                 later time on the home page.
               </li>
             </ol>
 
             <h2 class="text-2xl">Removing a location:</h2>
             <p>
-              If you no longer wish to track it, simply select
-              the location from the home page. At the bottom of the
-              page, there is an option to remove the location.
+              If you no longer wish to track a location,
+              go to the home page and simply tap the location you want to remove.
+              Scroll to the bottom of the page, where you'll find the button to remove it.
             </p>
           </div>
         </BaseModal>
