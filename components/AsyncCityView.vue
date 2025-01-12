@@ -52,7 +52,7 @@
                 <h1 class="text-center text-xl">Wind</h1>
                 <p>Speed: {{ Math.round(weatherData.wind.speed) }} mph</p>
                 <p v-if="weatherData.wind.gust">Gust: {{ Math.round(weatherData.wind.gust) }} mph</p>
-                <p>Direction: {{ getWindDirection(weatherData.wind.deg) }}</p>
+                <p>Direction: {{ weatherData.wind.deg }}&deg; {{ getWindDirection(weatherData.wind.deg) }}</p>
             </div>
         </div>
         <div v-if="!route.query.preview"
