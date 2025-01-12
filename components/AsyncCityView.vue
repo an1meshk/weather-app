@@ -52,7 +52,7 @@
                 <h1 class="text-center text-xl">Wind</h1>
                 <p>Speed: {{ Math.round(weatherData.wind.speed) }} mph</p>
                 <p v-if="weatherData.wind.gust">Gust: {{ Math.round(weatherData.wind.gust) }} mph</p>
-                <p>Direction: {{ Math.round(weatherData.wind.deg) }}&deg;</p>
+                <p>Direction: {{ getWindDirection(weatherData.wind.deg) }}</p>
             </div>
         </div>
         <div v-if="!route.query.preview"
@@ -114,5 +114,14 @@ const getLocalTimeFromOffsetArr = () => {
     const localTime = localDate.toUTCString().replace("GMT", "GMT+" + timezoneOffset / 3600);
     const dateTimeArr = localTime.split(" ")
     return dateTimeArr;
+}
+
+const getWindDirection = (deg) => {
+  const directions = [
+    "North", "Northeast", "East", "Southeast",
+    "South", "Southwest", "West", "Northwest"
+  ];
+  const index = Math.round(deg / 45) % 8;
+  return directions[index];
 }
 </script>
