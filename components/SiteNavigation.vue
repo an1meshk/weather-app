@@ -3,21 +3,27 @@
     <nav class="container flex flex-col sm:flex-row items-center gap-4 text-white py-6">
       <NuxtLink to="/" class="text-2xl font-bold">
         <div class="flex items-center gap-3">
-          <i class="fa-solid fa-sun text-2xl"></i>
+          <i class="fa-solid fa-sun fa-xl"></i>
           <p class="text-2xl">The Local Weather</p>
         </div>
       </NuxtLink>
-      <div class="flex gap-3 flex-1 justify-end">
-        <i class="fa-solid fa-circle-info text-xl hover:text-weather-secondary duration-150 cursor-pointer"
-          @click="toggleModal"></i>
-        <i v-if="route.query.preview" class="fa-solid fa-plus text-xl hover:text-weather-secondary duration-150 cursor-"
-          @click="addCity"></i>
+      <div class="flex w-full items-center">
+        <div class="flex-1 flex justify-center space-x-3 items-center pl-20">
+          <i class="fa-solid fa-circle-info fa-md hover:text-weather-secondary duration-150 cursor-pointer"
+            @click="toggleModal"></i>
+          <i v-if="route.query.preview" class="fa-solid fa-plus fa-lg hover:text-weather-secondary duration-150 cursor-"
+            @click="addCity"></i>
+        </div>
+        <h4 class="">&deg;C</h4>
+        <i v-if="isUnitMetric" class="fa-solid fa-toggle-off fa-xl ml-auto px-2" @click="handleToggleUnit"></i>
+        <i v-else class="fa-solid fa-toggle-on fa-xl ml-auto px-2" @click="handleToggleUnit"></i>
+        <h4 class="">&deg;F</h4>
 
         <BaseModal :modalActive="modalActive" @close-modal="toggleModal">
           <div class="text-black">
             <h1 class="text-2xl mb-1">About:</h1>
             <p class="mb-4">
-              The Local Weather allows you to track the weather of location of your choice.
+              The Local Weather allows you to track the weather for location of your choice.
             </p>
             <h2 class="text-2xl">How it works:</h2>
             <ol class="list-decimal list-inside mb-4">
@@ -51,11 +57,14 @@
 
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
+import { useUnitStore } from '~/stores/unitStore';
 
 const route = useRoute()
 const router = useRouter()
 const modalActive = ref(null)
 const savedCities = ref([])
+const unitStore = useUnitStore();
+const isUnitMetric = ref(false)
 
 const addCity = () => {
   if (localStorage.getItem('savedCities')) {
@@ -84,4 +93,12 @@ const addCity = () => {
 const toggleModal = () => {
   modalActive.value = !modalActive.value
 }
+
+const handleToggleUnit = () => {
+  unitStore.toggleUnit()
+}
+
+watchEffect(() => {
+  isUnitMetric.value = unitStore.isMetricUnit
+});
 </script>

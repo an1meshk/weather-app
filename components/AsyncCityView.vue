@@ -1,7 +1,7 @@
 <template>
     <div v-if="isError" class="flex flex-col items-center text-white py-10">Oh, snapp! something went wrong, try
         again.</div>
-    <div v-else class="flex flex-col flex-1 items-center mx-4">
+    <div v-else class="flex flex-col flex-1 items-center mx-4 my-2">
         <!-- Banner -->
         <div v-if="route.query.preview" class="text-white p-4 bg-weather-secondary w-full text-center">
             <p>You are currently previewing {{ route.params.city }}'s weather. Click the "+" icon to start tracking
@@ -9,7 +9,7 @@
             </p>
         </div>
         <!-- Weather Overview -->
-        <div class="flex flex-col items-center text-white py-10">
+        <div class="flex flex-col items-center text-white py-6">
             <h1 class="text-4xl mb-2 text-center text-wrap">
                 {{ `${route.params.city},
                 ${route.query.state ??
@@ -29,7 +29,7 @@
                 </p>
             </div>
             <p class="text-8xl mb-6">
-                {{ Math.round(weatherData.main.temp) }}&deg;F
+                {{ Math.round(weatherData.main.temp) }}&deg; {{ getUnitAbbrv() }}
             </p>
             <div class="text-center">
                 <p>
@@ -66,32 +66,38 @@
 
 <script setup>
 import { useRoute } from 'vue-router';
+import { useUnitStore } from '~/stores/unitStore';
 
+const unitStore = useUnitStore();
 const isError = ref(false)
 const route = useRoute()
+const isUnitMetric = ref(false)
+const weatherData = ref(null);
+const unit = computed(() => unitStore.currentUnit)
+
 const getWeatherData = async () => {
-    const { data, error } = await useFetch('/api/weather', {
-        query: {
-            lat: route.query.lat,
-            lon: route.query.lon
-        }
-    })
+    try {
+        const data = await $fetch('/api/weather', {
+            query: {
+                lat: route.query.lat,
+                lon: route.query.lon,
+                unit: unit.value
+            }
+        })
 
-    //Flicker Delay
-    await new Promise((res) => setTimeout(res, 500))
+        //Flicker Delay
+        await new Promise((res) => setTimeout(res, 500))
 
-    if (error.value) {
+        weatherData.value = data
+    } catch (err) {
         isError.value = true
         showError({
             statusCode: 500,
             message: "Oh, snapp! something went wrong. Could not get the weather information. Please try again"
         })
-    } else {
-        return data;
     }
 }
-
-const weatherData = await getWeatherData();
+await getWeatherData();
 
 const removeCity = async () => {
 
@@ -115,4 +121,14 @@ const getLocalTimeFromOffsetArr = () => {
     const dateTimeArr = localTime.split(" ")
     return dateTimeArr;
 }
+
+const getUnitAbbrv = () => {
+    return isUnitMetric.value ? "C" : "F"
+}
+
+watchEffect(async () => {
+    await getWeatherData();
+    isUnitMetric.value = unitStore.isMetricUnit
+});
+
 </script>

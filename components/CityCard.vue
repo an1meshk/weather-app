@@ -4,8 +4,9 @@
             <h2 class="text-3xl truncate">{{ city.city }}</h2>
             <h3>{{ city.state ?? city.country }}</h3>
         </div>
-        <div v-if="city.weather?.main" class="flex flex-col gap-2">
-            <p class="text-3xl self-end">{{ Math.round(city.weather?.main.temp) }}&deg F</p>
+        <div v-if="city?.weather?.main" class="flex flex-col gap-2">
+            <p class="text-3xl self-end">{{ Math.round(city.weather?.main.temp) }}&deg {{ getUnitAbbrv() }}
+            </p>
             <div class="flex gap-2">
                 <span class="text-xs">
                     H: {{ Math.round(city.weather?.main.temp_max) }}&deg
@@ -15,17 +16,37 @@
                 </span>
             </div>
         </div>
-        <div v-else class="flex flex-col gap-2">
+        <div v-else-if="!isLoading" class="flex flex-col gap-2">
             <p class="text-sm self-end">Data Unavailable</p>
+        </div>
+        <div v-else-if="isLoading" class="flex flex-col gap-2">
+            <AnimatedPlaceholder class="w-[75px]" />
         </div>
     </div>
 </template>
 
 <script setup>
+import { useUnitStore } from '~/stores/unitStore';
+
 defineProps({
     city: {
         type: Object,
         default: () => { }
+    },
+    isLoading: {
+        type: Boolean,
+        default: false
     }
+})
+
+const unitStore = useUnitStore();
+const isUnitMetric = ref(false)
+
+const getUnitAbbrv = () => {
+    return isUnitMetric.value ? "C" : "F"
+}
+
+watchEffect(() => {
+    isUnitMetric.value = unitStore.isMetricUnit
 })
 </script>
