@@ -8,7 +8,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "dev:mock": "MOCK=true concurrently --killOthers 'node mock-serve.js' 'nuxt dev'"
+    "dev:mock": "MOCK=true concurrently -n 'mock,server' -c 'auto' -p '{time}||[{name}]' --killOthers 'node mock-serve.js' 'nuxt dev'"
   },
   "dependencies": {
     "lodash.debounce": "^4.0.8",
