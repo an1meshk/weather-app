@@ -29,7 +29,7 @@
                 </p>
             </div>
             <p class="text-8xl mb-6">
-                {{ Math.round(weatherData.main.temp) }}&deg; {{ getUnitAbbrv() }}
+                {{ Math.round(weatherData.main.temp) }}&deg; {{ getTempUnit() }}
             </p>
             <div class="text-center">
                 <p>
@@ -50,8 +50,8 @@
 
             <div class="flex flex-col py-1 text-center">
                 <h1 class="text-center text-xl">Wind</h1>
-                <p>Speed: {{ Math.round(weatherData.wind.speed) }} mph</p>
-                <p v-if="weatherData.wind.gust">Gust: {{ Math.round(weatherData.wind.gust) }} mph</p>
+                <p>Speed: {{ Math.round(weatherData.wind.speed) }} {{ getSpeedUnit() }}</p>
+                <p v-if="weatherData.wind.gust">Gust: {{ Math.round(weatherData.wind.gust) }} {{ getSpeedUnit() }}</p>
                 <p>Direction: {{ weatherData.wind.deg }}&deg; {{ getWindDirection(weatherData.wind.deg) }}</p>
             </div>
         </div>
@@ -131,8 +131,12 @@ const getWindDirection = (deg) => {
   return directions[index];
 }
 
-const getUnitAbbrv = () => {
+const getTempUnit = () => {
     return isUnitMetric.value ? "C" : "F"
+}
+
+const getSpeedUnit = () => {
+		return isUnitMetric.value ? "kmph" : "mph"
 }
 
 watchEffect(async () => {
