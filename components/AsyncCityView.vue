@@ -1,6 +1,9 @@
 <template>
     <div v-if="isError" class="flex flex-col items-center text-white py-10">Oh, snapp! something went wrong, try
         again.</div>
+    <div v-else-if="isLoading">
+        <CityViewSkeleton />
+    </div>
     <div v-else class="flex flex-col flex-1 items-center mx-4 my-2">
         <!-- Banner -->
         <div v-if="route.query.preview" class="text-white p-4 bg-weather-secondary w-full text-center">
@@ -71,9 +74,14 @@ import { useUnitStore } from '~/stores/unitStore';
 const unitStore = useUnitStore();
 const isError = ref(false)
 const route = useRoute()
-const isUnitMetric = ref(false)
 const weatherData = ref(null);
-const unit = computed(() => unitStore.currentUnit)
+const isLocalUnitMetric = computed(() => {
+    return unitStore.isMetricUnit
+})
+const unit = computed(() => {
+    return unitStore.currentUnit
+})
+const isLoading = ref(false)
 
 const getWeatherData = async () => {
     try {
@@ -97,7 +105,15 @@ const getWeatherData = async () => {
         })
     }
 }
-await getWeatherData();
+
+try {
+    isLoading.value = true
+    await getWeatherData();
+} catch (err) {
+
+} finally {
+    isLoading.value = false
+}
 
 const removeCity = async () => {
 
@@ -123,25 +139,31 @@ const getLocalTimeFromOffsetArr = () => {
 }
 
 const getWindDirection = (deg) => {
-  const directions = [
-    "North", "Northeast", "East", "Southeast",
-    "South", "Southwest", "West", "Northwest"
-  ];
-  const index = Math.round(deg / 45) % 8;
-  return directions[index];
+    const directions = [
+        "North", "Northeast", "East", "Southeast",
+        "South", "Southwest", "West", "Northwest"
+    ];
+    const index = Math.round(deg / 45) % 8;
+    return directions[index];
 }
 
 const getTempUnit = () => {
-    return isUnitMetric.value ? "C" : "F"
+    return isLocalUnitMetric.value ? "C" : "F"
 }
 
 const getSpeedUnit = () => {
-		return isUnitMetric.value ? "kmph" : "mph"
+    return isLocalUnitMetric.value ? "kmph" : "mph"
 }
 
-watchEffect(async () => {
-    await getWeatherData();
-    isUnitMetric.value = unitStore.isMetricUnit
+watch(unit, async () => {
+    try {
+        isLoading.value = true
+        await getWeatherData();
+    } catch (err) {
+
+    } finally {
+        isLoading.value = false
+    }
 });
 
 </script>
