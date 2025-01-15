@@ -5,7 +5,7 @@
             <h3>{{ city.state ?? city.country }}</h3>
         </div>
         <div v-if="city?.weather?.main" class="flex flex-col gap-2">
-            <p class="text-3xl self-end">{{ Math.round(city.weather?.main.temp) }}&deg {{ getUnitAbbrv() }}
+            <p class="text-3xl self-end">{{ Math.round(city.weather?.main.temp) }}&deg{{ getUnitAbbrv() }}
             </p>
             <div class="flex gap-2">
                 <span class="text-xs">

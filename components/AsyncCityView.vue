@@ -32,7 +32,7 @@
                 </p>
             </div>
             <p class="text-8xl mb-6">
-                {{ Math.round(weatherData.main.temp) }}&deg; {{ getTempUnit() }}
+                {{ Math.round(weatherData.main.temp) }}&deg;{{ getTempUnit() }}
             </p>
             <div class="text-center">
                 <p>

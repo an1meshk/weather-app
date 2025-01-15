@@ -15,7 +15,7 @@
             @click="addCity"></i>
         </div>
         <h4 class="">&deg;C</h4>
-        <i v-if="isUnitMetric" class="fa-solid fa-toggle-off fa-xl ml-auto px-2" @click="handleToggleUnit"></i>
+        <i v-if="isLocalUnitMetric" class="fa-solid fa-toggle-off fa-xl ml-auto px-2" @click="handleToggleUnit"></i>
         <i v-else class="fa-solid fa-toggle-on fa-xl ml-auto px-2" @click="handleToggleUnit"></i>
         <h4 class="">&deg;F</h4>
 
@@ -61,10 +61,12 @@ import { useUnitStore } from '~/stores/unitStore';
 
 const route = useRoute()
 const router = useRouter()
-const modalActive = ref(null)
+const modalActive = ref(false)
 const savedCities = ref([])
 const unitStore = useUnitStore();
-const isUnitMetric = ref(false)
+const isLocalUnitMetric = computed(() => {
+  return unitStore.isMetricUnit
+})
 
 const addCity = () => {
   if (localStorage.getItem('savedCities')) {
@@ -98,7 +100,11 @@ const handleToggleUnit = () => {
   unitStore.toggleUnit()
 }
 
-watchEffect(() => {
-  isUnitMetric.value = unitStore.isMetricUnit
-});
+watch(modalActive, (active) => {
+  if (active) {
+    document.body.classList.add('overflow-hidden')
+  } else {
+    document.body.classList.remove('overflow-hidden')
+  }
+})
 </script>
