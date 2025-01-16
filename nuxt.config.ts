@@ -32,5 +32,12 @@ export default defineNuxtConfig({
     public: {
       apiBase: process.env.MOCK ? 'http://localhost:8080' : 'https://api.openweathermap.org'
     }
-  }
+  },
+  vite: {
+    build: {
+      rollupOptions: {
+        external: ['lodash.clonedeep'],
+      },
+    },
+  },
 })
