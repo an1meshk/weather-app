@@ -16,7 +16,7 @@
 <script setup>
 import { useUnitStore } from '~/stores/unitStore';
 import { useLocationStore } from '~/stores/locationStore';
-import cloneDeep from 'lodash.cloneDeep';
+import cloneDeep from 'lodash.clonedeep';
 
 const unitStore = useUnitStore();
 const locationStore = useLocationStore();
