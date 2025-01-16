@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { STORED_LOCATION_KEY } from "~/utils/constant";
+import cloneDeep from 'lodash.cloneDeep';
 
 export const useLocationStore = defineStore('locationStore',() => {
     const locationArray = ref([])
@@ -14,7 +15,7 @@ export const useLocationStore = defineStore('locationStore',() => {
         }catch (err){
             console.error('failed to fetch tracked locations')
         }finally{
-            return locationArray.value
+            return cloneDeep(locationArray.value)
         }
     }
 

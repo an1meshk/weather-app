@@ -40,13 +40,10 @@ defineProps({
 })
 
 const unitStore = useUnitStore();
-const isUnitMetric = ref(false)
+const isLocalUnitMetric = computed(() => unitStore.isMetricUnit)
 
 const getUnitAbbrv = () => {
-    return isUnitMetric.value ? "C" : "F"
+    return isLocalUnitMetric.value ? "C" : "F"
 }
 
-watchEffect(() => {
-    isUnitMetric.value = unitStore.isMetricUnit
-})
 </script>

@@ -11,6 +11,7 @@
     "dev:mock": "MOCK=true concurrently -n 'mock,server' -c 'auto' -p '{time}||[{name}]' --killOthers 'node mock-serve.js' 'nuxt dev'"
   },
   "dependencies": {
+    "lodash.clonedeep": "^4.5.0",
     "lodash.debounce": "^4.0.8",
     "nuxt": "^3.15.1",
     "pinia": "^2.3.0",
