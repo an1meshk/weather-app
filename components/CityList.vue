@@ -16,6 +16,7 @@
 <script setup>
 import { useUnitStore } from '~/stores/unitStore';
 import { useLocationStore } from '~/stores/locationStore';
+import cloneDeep from 'lodash.cloneDeep';
 
 const unitStore = useUnitStore();
 const locationStore = useLocationStore();
@@ -25,7 +26,7 @@ const unit = computed(() => unitStore.currentUnit)
 
 const getCities = async () => {
     try {
-        savedLocations.value = locationStore.getLocation()
+        savedLocations.value = cloneDeep(locationStore.getLocation())
 
         const requests = []
         savedLocations.value.forEach((city) => {
