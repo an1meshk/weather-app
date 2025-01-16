@@ -5,7 +5,7 @@ export const useLocationStore = defineStore('locationStore',() => {
     const locationArray = ref([])
 
     const getLocation = () => {
-        if(locationArray.value) return locationArray.value
+        if(locationArray.value.length != 0) return locationArray.value
 
         try{
             if (localStorage.getItem(STORED_LOCATION_KEY)) {
