@@ -2,9 +2,9 @@
     <Teleport to="body">
         <Transition name="modal-outer">
             <div v-show="modalActive"
-                class="absolute bg-black bg-opacity-30 h-[100vh] w-[100vw] top-0 left-0 flex justify-center px-8 z-10 overflow-auto">
+                class="absolute bg-black bg-opacity-30 max-w-screen max-h-screen insert-0 flex justify-center px-8 pb-20 z-10 overflow-y-auto">
                 <Transition name="modal-inner">
-                    <div v-if="modalActive" class="p-4 bg-white self-start mt-32 mb-4 max-w-screen-md relative">
+                    <div v-if="modalActive" class="p-4 bg-white self-start mt-32 mb-4 relative">
                         <i class="fa-solid fa-xmark absolute top-0 right-0 mt-4 mr-4" @click="$emit('close-modal')"></i>
                         <slot></slot>
                         <div class="text-center">
