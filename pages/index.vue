@@ -38,10 +38,12 @@
 <script setup>
 import debounce from 'lodash.debounce'
 import { uid } from 'uid'
+import { useLocationStore } from '~/stores/locationStore'
 
 const searchQuery = ref("")
 const searchResults = ref(null)
 const searchError = ref(false)
+const locationStore = useLocationStore()
 
 useHead({
     titleTemplate: 'Home %s'
@@ -72,10 +74,10 @@ const debouncedSearch = debounce(getSearchResult, 400)
 const previewCity = async (searchResult) => {
     let trackedCity = null
     try {
-        if (localStorage.getItem('savedCities')) {
-            const savedCities = JSON.parse(localStorage.getItem('savedCities'))
+        if (!!locationStore.getLocation()) {
+            const savedLocations = locationStore.getLocation()
 
-            trackedCity = savedCities.find(city => {
+            trackedCity = savedLocations.find(city => {
                 return city.coords.lat === searchResult.lat.toString()
                     && city.coords.lon === searchResult.lon.toString()
             })

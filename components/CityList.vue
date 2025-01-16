@@ -1,8 +1,8 @@
 <template>
     <ClientOnly>
         <div>
-            <div v-if="savedCities.length > 0">
-                <div v-for="city in savedCities" :key="city.id" class="py-2">
+            <div v-if="savedLocations.length > 0">
+                <div v-for="city in savedLocations" :key="city.id" class="py-2">
                     <CityCard :city="city" @click="goToCityView(city)" :isLoading="isLoading" />
                 </div>
             </div>
@@ -15,20 +15,20 @@
 
 <script setup>
 import { useUnitStore } from '~/stores/unitStore';
+import { useLocationStore } from '~/stores/locationStore';
 
 const unitStore = useUnitStore();
-const savedCities = ref([])
+const locationStore = useLocationStore();
+const savedLocations = ref([])
 const isLoading = ref(false)
 const unit = computed(() => unitStore.currentUnit)
 
 const getCities = async () => {
     try {
-        if (localStorage.getItem('savedCities')) {
-            savedCities.value = JSON.parse(localStorage.getItem('savedCities'))
-        }
+        savedLocations.value = locationStore.getLocation()
 
         const requests = []
-        savedCities.value.forEach((city) => {
+        savedLocations.value.forEach((city) => {
             requests.push(
                 $fetch('/api/weather', {
                     query: {
@@ -46,7 +46,7 @@ const getCities = async () => {
         await new Promise((res) => setTimeout(res, 500))
 
         weatherData.forEach((value, index) => {
-            savedCities.value[index].weather = value
+            savedLocations.value[index].weather = value
         })
     } catch (err) {
 

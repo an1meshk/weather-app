@@ -70,8 +70,10 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import { useUnitStore } from '~/stores/unitStore';
+import { useLocationStore } from '~/stores/locationStore';
 
 const unitStore = useUnitStore();
+const locationStore = useLocationStore();
 const isError = ref(false)
 const route = useRoute()
 const weatherData = ref(null);
@@ -116,12 +118,7 @@ try {
 }
 
 const removeCity = async () => {
-
-    const cities = JSON.parse(localStorage.getItem('savedCities'))
-    const updatedCities = cities.filter((city) => city.id !== route.query.id)
-
-    localStorage.setItem('savedCities', JSON.stringify(updatedCities))
-
+    locationStore.removeStoredLocation(route.query.id)
     await navigateTo('/')
 }
 

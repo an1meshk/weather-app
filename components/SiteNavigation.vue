@@ -58,21 +58,18 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
 import { useUnitStore } from '~/stores/unitStore';
+import { useLocationStore } from '~/stores/locationStore';
 
 const route = useRoute()
 const router = useRouter()
 const modalActive = ref(false)
-const savedCities = ref([])
 const unitStore = useUnitStore();
+const locationStore = useLocationStore()
 const isLocalUnitMetric = computed(() => {
   return unitStore.isMetricUnit
 })
 
 const addCity = () => {
-  if (localStorage.getItem('savedCities')) {
-    savedCities.value = JSON.parse(localStorage.getItem('savedCities'))
-  }
-
   const locationObj = {
     id: route.query.id,
     state: route.query.state,
@@ -84,8 +81,7 @@ const addCity = () => {
     }
   }
 
-  savedCities.value.push(locationObj)
-  localStorage.setItem('savedCities', JSON.stringify(savedCities.value))
+  locationStore.addLocation(locationObj)
 
   let query = Object.assign({}, route.query)
   delete query.preview
