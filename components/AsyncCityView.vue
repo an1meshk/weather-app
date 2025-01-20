@@ -15,8 +15,9 @@
         <div class="flex flex-col items-center text-white py-6">
             <div v-if="!!selectedOption && !route.query.preview && trackedOptions.length > 1"
                 class="text-xl mb-2 text-center">
-                <Dropdown @option-selected="handleSelection" />
-
+                <ClientOnly>
+                    <Dropdown @option-selected="handleSelection" />
+                </ClientOnly>
                 <h1 class="text-4xl mt-3 text-center text-wrap">
                     {{ `${selectedOption.city},
                     ${selectedOption.state ??
@@ -92,7 +93,7 @@ const isError = ref(false)
 const route = useRoute()
 const weatherData = ref(null);
 const isLoading = ref(false)
-const selectedOption = computed(() => selectedCityStore.selectedCity)
+const selectedOption = ref(null)
 const trackedOptions = computed(() => {
     const trackedLocations = cloneDeep(locationStore.getLocation())
     return trackedLocations
@@ -200,5 +201,9 @@ watch(selectedOption, async (newLocation) => {
         isLoading.value = false
     }
 });
+
+watchEffect(() => {
+    selectedOption.value = selectedCityStore.getSelectedCity()
+})
 
 </script>

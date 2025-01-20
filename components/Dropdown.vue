@@ -42,7 +42,7 @@ const options = computed(() => {
 })
 
 const isOpen = ref(false)
-const selectedOption = computed(() => selectedCityStore.selectedCity)
+const selectedOption = computed(() => selectedCityStore.getSelectedCity())
 
 const toggleDropdown = () => {
     isOpen.value = !isOpen.value;
