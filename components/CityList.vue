@@ -16,10 +16,12 @@
 <script setup>
 import { useUnitStore } from '~/stores/unitStore';
 import { useLocationStore } from '~/stores/locationStore';
+import { useSelectedCity } from '~/stores/selectedCityStore';
 import cloneDeep from 'lodash.clonedeep';
 
 const unitStore = useUnitStore();
 const locationStore = useLocationStore();
+const selectedCityStore = useSelectedCity()
 const savedLocations = ref([])
 const isLoading = ref(false)
 const unit = computed(() => unitStore.currentUnit)
@@ -66,6 +68,7 @@ onMounted(async () => {
 });
 
 const goToCityView = async (city) => {
+    selectedCityStore.updateSelectedCity(city)
     const routePath = `weather/${city.city}~${city.country}`
 
     await navigateTo(

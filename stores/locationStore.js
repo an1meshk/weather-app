@@ -40,6 +40,7 @@ export const useLocationStore = defineStore('locationStore',() => {
     }
 
     return{
+        locationArray,
         getLocation,
         addLocation,
         removeStoredLocation

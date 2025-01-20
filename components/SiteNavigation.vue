@@ -59,12 +59,14 @@
 import { useRoute, useRouter } from 'vue-router'
 import { useUnitStore } from '~/stores/unitStore';
 import { useLocationStore } from '~/stores/locationStore';
+import { useSelectedCity } from '~/stores/selectedCityStore';
 
 const route = useRoute()
 const router = useRouter()
 const modalActive = ref(false)
 const unitStore = useUnitStore();
 const locationStore = useLocationStore()
+const selectedCityStore = useSelectedCity()
 const isLocalUnitMetric = computed(() => {
   return unitStore.isMetricUnit
 })
@@ -82,6 +84,7 @@ const addCity = () => {
   }
 
   locationStore.addLocation(locationObj)
+  selectedCityStore.updateSelectedCity(locationObj)
 
   let query = Object.assign({}, route.query)
   delete query.preview

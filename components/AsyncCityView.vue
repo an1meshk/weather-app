@@ -13,11 +13,22 @@
         </div>
         <!-- Weather Overview -->
         <div class="flex flex-col items-center text-white py-6">
-            <h1 class="text-4xl mb-2 text-center text-wrap">
+            <div v-if="!!selectedOption && !route.query.preview && trackedOptions.length > 1"
+                class="text-xl mb-2 text-center">
+                <Dropdown @option-selected="handleSelection" />
+
+                <h1 class="text-4xl mt-3 text-center text-wrap">
+                    {{ `${selectedOption.city},
+                    ${selectedOption.state ??
+                        selectedOption.country}`
+                    }}</h1>
+            </div>
+            <h1 v-else-if="route.params.city" class="text-4xl mb-2 text-center text-wrap">
                 {{ `${route.params.city},
                 ${route.query.state ??
                     route.params.country}`
                 }}</h1>
+
             <div class="text-sm mb-8 text-center">
                 <p>
                     {{
@@ -71,26 +82,35 @@
 import { useRoute } from 'vue-router';
 import { useUnitStore } from '~/stores/unitStore';
 import { useLocationStore } from '~/stores/locationStore';
+import { useSelectedCity } from '~/stores/selectedCityStore';
+import cloneDeep from 'lodash.clonedeep';
 
 const unitStore = useUnitStore();
 const locationStore = useLocationStore();
+const selectedCityStore = useSelectedCity()
 const isError = ref(false)
 const route = useRoute()
 const weatherData = ref(null);
+const isLoading = ref(false)
+const selectedOption = computed(() => selectedCityStore.selectedCity)
+const trackedOptions = computed(() => {
+    const trackedLocations = cloneDeep(locationStore.getLocation())
+    return trackedLocations
+})
+
 const isLocalUnitMetric = computed(() => {
     return unitStore.isMetricUnit
 })
 const unit = computed(() => {
     return unitStore.currentUnit
 })
-const isLoading = ref(false)
 
-const getWeatherData = async () => {
+const getWeatherData = async (lat = null, lon = null) => {
     try {
         const data = await $fetch('/api/weather', {
             query: {
-                lat: route.query.lat,
-                lon: route.query.lon,
+                lat: lat ?? route.query.lat,
+                lon: lon ?? route.query.lon,
                 unit: unit.value
             }
         })
@@ -119,6 +139,7 @@ try {
 
 const removeCity = async () => {
     locationStore.removeStoredLocation(route.query.id)
+    selectedCityStore.updateSelectedCity(null)
     await navigateTo('/')
 }
 
@@ -152,10 +173,27 @@ const getSpeedUnit = () => {
     return isLocalUnitMetric.value ? "kmph" : "mph"
 }
 
+const handleSelection = (option) => {
+    selectedOption.value = option;
+}
+
 watch(unit, async () => {
     try {
         isLoading.value = true
         await getWeatherData();
+    } catch (err) {
+
+    } finally {
+        isLoading.value = false
+    }
+});
+
+watch(selectedOption, async (newLocation) => {
+    if (newLocation === null) return
+
+    try {
+        isLoading.value = true
+        await getWeatherData(newLocation.coords.lat, newLocation.coords.lon);
     } catch (err) {
 
     } finally {
