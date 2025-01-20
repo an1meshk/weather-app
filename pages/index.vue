@@ -119,5 +119,6 @@ const previewCity = async (searchResult) => {
 const clearInput = () => {
     searchQuery.value = null
     searchError.value = false
+    searchResults.value = null
 }
 </script>
