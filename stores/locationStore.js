@@ -27,6 +27,15 @@ export const useLocationStore = defineStore('locationStore',() => {
         }
     }
 
+    const replaceWithNewArrangedLocationList = (newLocationList) => {
+        try{
+            locationArray.value = newLocationList
+            localStorage.setItem(STORED_LOCATION_KEY, JSON.stringify(locationArray.value))
+        }catch (err) {
+            console.error('failed to replace new arranged location list')
+        }
+    }
+
     const removeStoredLocation = (locationId) => {
         try{
             const cities = locationArray.value
@@ -43,6 +52,7 @@ export const useLocationStore = defineStore('locationStore',() => {
         locationArray,
         getLocation,
         addLocation,
-        removeStoredLocation
+        removeStoredLocation,
+        replaceWithNewArrangedLocationList
     }
 })

@@ -1,11 +1,18 @@
 <template>
     <ClientOnly>
-        <div>
-            <div v-if="savedLocations.length > 0">
-                <div v-for="city in savedLocations" :key="city.id" class="py-2">
-                    <CityCard :city="city" @click="goToCityView(city)" :isLoading="isLoading" />
-                </div>
-            </div>
+        <div class="p-4 pt-2">
+            <template v-if="savedLocations.length > 0">
+                <h1 class="text-xl mb-2 text-center">Arrange Your Weather Cards</h1>
+                <!-- Draggable container -->
+                <draggable v-model="savedLocations" group="people" animation="200" @end="onDragEnd" @start="onDragStart"
+                    item-key="id" :class="{ 'dragging': isDragging }">
+                    <template #item="{ element: city }">
+                        <div class="py-2">
+                            <CityCard :city="city" @click="goToCityView(city)" :isLoading="isLoading" />
+                        </div>
+                    </template>
+                </draggable>
+            </template>
             <div v-else>
                 <p>No locations added. To start tracking a location, search in the field above.</p>
             </div>
@@ -18,12 +25,14 @@ import { useUnitStore } from '~/stores/unitStore';
 import { useLocationStore } from '~/stores/locationStore';
 import { useSelectedCity } from '~/stores/selectedCityStore';
 import cloneDeep from 'lodash.clonedeep';
+import draggable from 'vuedraggable'
 
 const unitStore = useUnitStore();
 const locationStore = useLocationStore();
 const selectedCityStore = useSelectedCity()
 const savedLocations = ref([])
 const isLoading = ref(false)
+const isDragging = ref(false)
 const unit = computed(() => unitStore.currentUnit)
 
 const getCities = async () => {
@@ -84,6 +93,15 @@ const goToCityView = async (city) => {
     )
 }
 
+const onDragEnd = () => {
+    isDragging.value = false
+    locationStore.replaceWithNewArrangedLocationList(cloneDeep(savedLocations.value))
+};
+
+const onDragStart = () => {
+    isDragging.value = true
+}
+
 watch(unit, async (newUnit, oldUnit) => {
     if (newUnit !== oldUnit) {
         try {
@@ -98,3 +116,9 @@ watch(unit, async (newUnit, oldUnit) => {
 });
 
 </script>
+
+<style>
+.dragging {
+    opacity: 0.8;
+}
+</style>
