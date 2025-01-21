@@ -1,7 +1,7 @@
 <template>
     <main class="container text-white">
         <div class="pt-4 mb-8 relative">
-            <div class="flex items-center gap-3 justify-between">
+            <div class="flex items-center gap-3 justify-between px-2">
                 <input v-model="searchQuery" @input="debouncedSearch" type="text" placeholder="Search for a location"
                     class="py-2 px-1 w-full bg-transparent border-b focus:border-weather-secondary focus:outline-none focus:shadow-sm"
                     maxlength="35">

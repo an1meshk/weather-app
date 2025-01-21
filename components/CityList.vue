@@ -1,6 +1,6 @@
 <template>
     <ClientOnly>
-        <div class="p-4 pt-2">
+        <div class="p-2">
             <template v-if="savedLocations.length > 0">
                 <h1 class="text-xl mb-2 text-center">Arrange Your Weather Cards</h1>
                 <!-- Draggable container -->

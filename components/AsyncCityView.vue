@@ -64,7 +64,7 @@
             <hr class="border-white border-opacity-10 border w-full" />
 
             <div class="flex flex-col py-1 text-center">
-                <h1 class="text-center text-xl">Wind</h1>
+                <h1 class="text-center text-xl font-bold">Wind</h1>
                 <p>Speed: {{ Math.round(weatherData.wind.speed) }} {{ getSpeedUnit() }}</p>
                 <p v-if="weatherData.wind.gust">Gust: {{ Math.round(weatherData.wind.gust) }} {{ getSpeedUnit() }}</p>
                 <p>Direction: {{ weatherData.wind.deg }}&deg; {{ getWindDirection(weatherData.wind.deg) }}</p>

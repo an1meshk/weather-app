@@ -1,13 +1,13 @@
 <template>
-    <div class="relative inline-block w-64">
+    <div class="relative inline-block w-[300px]">
         <!-- Dropdown Button -->
         <button @click="toggleDropdown"
             class="bg-weather-secondary px-4 py-2 rounded-md w-full flex items-center justify-between min-w-0">
-            <span v-if="selectedOption" class="truncate max-w-[200px]">{{ selectedOption.city }}, {{
+            <span v-if="selectedOption" class="truncate max-w-[250px]">{{ selectedOption.city }}, {{
                 selectedOption.state
                 ??
                 selectedOption.country
-                }}</span>
+            }}</span>
             <span v-else>Select an option</span>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-[20px] w-[20px] transform"
                 :class="{ 'rotate-180': isOpen }" viewBox="0 0 20 20" fill="currentColor">
