@@ -7,7 +7,7 @@
                 selectedOption.state
                 ??
                 selectedOption.country
-            }}</span>
+                }}</span>
             <span v-else>Select an option</span>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-[20px] w-[20px] transform"
                 :class="{ 'rotate-180': isOpen }" viewBox="0 0 20 20" fill="currentColor">
@@ -18,7 +18,7 @@
         </button>
 
         <!-- Dropdown List -->
-        <ul v-if="isOpen" class="absolute z-10 bg-weather-primary shadow-lg rounded w-full mt-1 min-w-0">
+        <ul v-if="isOpen" class="absolute z-10 bg-weather-secondary shadow-lg rounded w-full mt-[2px] min-w-0">
             <li v-for="(option, index) in options" :key="index" @click="selectOption(option)"
                 class="px-4 py-2 hover:bg-gray-500 cursor-pointer truncate">
                 {{ option.city }}, {{ option.state ?? option.country }}
