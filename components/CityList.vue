@@ -2,7 +2,7 @@
     <ClientOnly>
         <div class="p-2">
             <template v-if="savedLocations.length > 0">
-                <h1 class="text-xl mb-2 text-center">Drag up/down to arrange your weather cards</h1>
+                <h1 v-if="savedLocations.length > 1" class="text-xl mb-2 text-center">Drag up/down to arrange your weather cards</h1>
                 <!-- Draggable container -->
                 <draggable v-model="savedLocations" group="people" animation="200" @end="onDragEnd" @start="onDragStart"
                     item-key="id" :class="{ 'dragging': isDragging }">
