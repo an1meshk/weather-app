@@ -29,7 +29,7 @@ export const useLocationStore = defineStore('locationStore',() => {
 
     const replaceWithNewArrangedLocationList = (newLocationList) => {
         try{
-            newLocationList.array.forEach(location => 
+            newLocationList.forEach(location => 
                 delete location.weather
             );
             locationArray.value = newLocationList
