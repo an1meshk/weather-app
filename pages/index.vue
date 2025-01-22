@@ -7,11 +7,12 @@
                     maxlength="35">
                 <i v-if="searchQuery" class="fa-solid fa-xmark w-[10px]" @click="clearInput"></i>
             </div>
-            <ul v-if="searchQuery?.length !== 0 && (searchResults || searchError)"
+            <ul v-if="searchQuery?.length !== 0 && (searchResults || searchError || isLoading)"
                 class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[66px]">
-                <p v-if="searchError">Oh, snapp! something went wrong, try again.</p>
-
-                <p v-else-if="!searchError && searchResults?.length === 0">No results match your input, try a different
+                <p v-if="isLoading">Searching...</p>
+                <p v-else-if="searchError">Oh, snapp! something went wrong, try again.</p>
+                <p v-else-if="searchResults?.length === 0">No results match your input,
+                    try a different
                     location.
                 </p>
 
@@ -44,6 +45,7 @@ const searchQuery = ref("")
 const searchResults = ref(null)
 const searchError = ref(false)
 const locationStore = useLocationStore()
+const isLoading = ref(false)
 
 useHead({
     titleTemplate: 'Home %s'
@@ -56,6 +58,7 @@ const getSearchResult = async () => {
     }
 
     try {
+        isLoading.value = true
         const data = await $fetch('/api/geocoding', {
             query: {
                 searchText: searchQuery.value
@@ -66,10 +69,12 @@ const getSearchResult = async () => {
             searchResults.value = data
     } catch (err) {
         searchError.value = true
+    } finally {
+        isLoading.value = false
     }
 
 }
-const debouncedSearch = debounce(getSearchResult, 400)
+const debouncedSearch = debounce(getSearchResult, 500)
 
 const previewCity = async (searchResult) => {
     let trackedCity = null
