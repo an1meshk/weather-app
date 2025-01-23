@@ -190,7 +190,7 @@ watch(unit, async () => {
 });
 
 watch(selectedOption, async (newLocation) => {
-    if (newLocation === null) return
+    if (newLocation === null || !!route.query.preview) return
 
     try {
         isLoading.value = true
